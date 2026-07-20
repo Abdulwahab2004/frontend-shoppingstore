@@ -10,7 +10,7 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold text-dark mb-2">
           Welcome, {user?.name || "User"}
         </h1>
-        <p className="text-forest mb-6">{user?.email}</p>
+        <p className="text-forest mb-6 ">{user?.email}</p>
 
         <Button variant="outline" onClick={logout}>
           Logout

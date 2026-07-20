@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import Button from "../components/common/Button";
 import Loader from "../components/common/Loader";
+import { verifyEmail } from "../services/authService";
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -10,14 +11,17 @@ export default function VerifyEmail() {
   const [status, setStatus] = useState("pending"); // pending | success | error
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     setIsLoading(true);
 
-    // TODO: call backend verify-email API with the token in the next step
-    console.log("Verifying token:", token);
-
-    setIsLoading(false);
-    setStatus("success"); // placeholder — replace with real API result
+    try {
+      await verifyEmail(token);
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

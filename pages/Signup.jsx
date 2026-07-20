@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
+import { signupUser } from "../services/authService";
 
 export default function Signup() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,7 +20,7 @@ export default function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -28,10 +31,14 @@ export default function Signup() {
 
     setIsLoading(true);
 
-    // TODO: connect to backend signup API in the next step
-    console.log("Signup data:", formData);
-
-    setIsLoading(false);
+    try {
+      await signupUser(formData);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.message || "Signup failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -23,7 +23,7 @@ export default function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className={`w-full px-3 py-2 rounded-lg border outline-none transition-colors duration-200
+        className={`w-full px-3 py-2 rounded-lg border outline-none transition-colors duration-200 font-poppins
           ${error ? "border-red-500 focus:border-red-500" : "border-sage focus:border-fern"}`}
       />
       {error && <p className="mt-1 text-sm text-red-600">{error}</p>}

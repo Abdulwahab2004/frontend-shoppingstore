@@ -8,7 +8,7 @@ export default function Loader({ size = "md" }) {
   return (
     <div className="flex items-center justify-center py-6">
       <div
-        className={`${sizes[size]} rounded-full border-sage border-t-fern animate-spin`}
+        className={`${sizes[size]} rounded-full border-sage border-t-fern animate-spin font-poppins`}
       />
     </div>
   );

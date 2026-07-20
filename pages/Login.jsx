@@ -1,9 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
+import { loginUser } from "../services/authService";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -12,15 +17,20 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
-    // TODO: connect to backend login API in the next step
-    console.log("Login data:", formData);
-
-    setIsLoading(false);
+    try {
+      const data = await loginUser(formData);
+      login(data.user, data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

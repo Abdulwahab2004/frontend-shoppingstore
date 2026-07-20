@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import { loginUser } from "../services/authService";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useauth"
 
 export default function Login() {
   const navigate = useNavigate();

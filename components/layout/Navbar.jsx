@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { APP_NAME } from "../../utils/constants";
-import { useAuth } from "../../hooks/useAuth";
+import { APP_NAME } from "../../utils/constant";
+import { useAuth } from "../../hooks/useauth";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

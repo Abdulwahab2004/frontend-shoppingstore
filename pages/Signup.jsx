@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import { signupUser } from "../services/authService";
 
 export default function Signup() {
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,6 +13,7 @@ export default function Signup() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,13 +32,32 @@ export default function Signup() {
 
     try {
       await signupUser(formData);
-      navigate("/login");
+      setIsSubmitted(true);
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (isSubmitted) {
+    return (
+      <section className="max-w-md mx-auto px-4 py-16 text-center">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h1 className="text-2xl font-bold text-dark mb-4">
+            Verify Your Email
+          </h1>
+          <p className="text-forest mb-6">
+            We've sent a verification link to your email. Please check your
+            inbox (and spam folder) to verify your account.
+          </p>
+          <Link to="/login">
+            <Button fullWidth>Go to Login</Button>
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-md mx-auto px-4 py-16">

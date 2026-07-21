@@ -1,25 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { APP_NAME } from "./../../utils/constant";
+import { APP_NAME } from "../../utils/constants";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
 
-  const links = [
-    { name: "Home", path: "/" },
-    { name: "Login", path: "/login" },
-    { name: "Signup", path: "/signup" },
-  ];
+  const links = user
+    ? [{ name: "Dashboard", path: "/dashboard" }]
+    : [
+        { name: "Home", path: "/" },
+        { name: "Login", path: "/login" },
+        { name: "Signup", path: "/signup" },
+      ];
 
   return (
-    <nav className="bg-dark text-white font-poppins">
+    <nav className="bg-dark text-white">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
         <Link to="/" className="text-xl font-bold text-sage">
           {APP_NAME}
         </Link>
 
-        {/* Desktop links */}
         <div className="hidden md:flex gap-6">
           {links.map((link) => (
             <Link key={link.path} to={link.path} className="hover:text-sage">
@@ -28,7 +30,6 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Mobile menu button */}
         <button
           className="md:hidden text-2xl"
           onClick={() => setIsOpen(!isOpen)}
@@ -37,7 +38,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile links */}
       {isOpen && (
         <div className="md:hidden flex flex-col gap-3 px-4 pb-4">
           {links.map((link) => (

@@ -17,7 +17,7 @@ export default function Dashboard() {
         </h1>
         <p className="text-forest mb-6 ">{user?.email}</p>
 
-        <Button variant="outline" onClick={logoutUser()}>
+        <Button variant="outline" onClick={handleLogout}>
           Logout
         </Button>
       </div>

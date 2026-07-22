@@ -6,6 +6,8 @@ import Signup from "../pages/Signup";
 import VerifyEmail from "../pages/VerifyEmail";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoutes";
+import Categories from "../pages/Categories";
+import Products from "../pages/Products";
 
 export default function AppRoutes() {
   return (
@@ -15,6 +17,8 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/products" element={<Products />} />
         <Route
           path="/dashboard"
           element={

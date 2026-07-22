@@ -14,3 +14,8 @@ export const verifyEmail = async (token) => {
   const res = await api.get(`/auth/verify-email?token=${token}`);
   return res.data;
 };
+
+export const logoutUser = async () => {
+  const res = await api.post("/auth/logout");
+  return res.data;
+};

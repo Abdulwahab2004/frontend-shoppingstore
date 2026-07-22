@@ -8,15 +8,21 @@ export default function Navbar() {
   const { user } = useAuth();
 
   const links = user
-    ? [{ name: "Dashboard", path: "/dashboard" }]
+    ? [
+        { name: "Categories", path: "/categories" },
+        { name: "Products", path: "/products" },
+        { name: "Dashboard", path: "/dashboard" },
+      ]
     : [
         { name: "Home", path: "/" },
+        { name: "Categories", path: "/categories" },
+        { name: "Products", path: "/products" },
         { name: "Login", path: "/login" },
         { name: "Signup", path: "/signup" },
       ];
 
   return (
-    <nav className="bg-dark text-white">
+    <nav className="bg-dark text-white sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="text-xl font-bold text-sage">
           {APP_NAME}

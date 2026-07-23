@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getProducts } from "../services/productService";
 import ProductCard from "../components/products/ProductCard";
 import SearchBar from "../components/products/SearchBar";
@@ -6,6 +7,9 @@ import Filters from "../components/products/Filters";
 import Loader from "../components/common/Loader";
 
 export default function Products() {
+  const [searchParams] = useSearchParams();
+  const categorySlug = searchParams.get("category");
+
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -15,7 +19,11 @@ export default function Products() {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const data = await getProducts(queryParams);
+        const params = { ...queryParams };
+        if (categorySlug) {
+          params.category = categorySlug;
+        }
+        const data = await getProducts(params);
         setProducts(data.products);
       } catch (err) {
         setError("Failed to load products");
@@ -24,7 +32,7 @@ export default function Products() {
       }
     };
     fetchProducts();
-  }, [queryParams]);
+  }, [queryParams, categorySlug]);
 
   const handleSearch = (search) => {
     setQueryParams((prev) => ({ ...prev, search }));
@@ -36,7 +44,9 @@ export default function Products() {
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-dark mb-6">Products</h1>
+      <h1 className="text-2xl font-bold text-dark mb-6">
+        {categorySlug ? `Products in "${categorySlug}"` : "Products"}
+      </h1>
 
       <SearchBar onSearch={handleSearch} />
       <Filters onFilter={handleFilter} />

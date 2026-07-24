@@ -20,7 +20,7 @@ export default function AppRoutes() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
+       <Route path="/products/:id" element={<ProductDetails />} />
         <Route
           path="/dashboard"
           element={

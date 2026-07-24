@@ -28,7 +28,7 @@ export default function ProductDetails() {
 
   if (error) {
     return (
-      <section className="max-w-4xl mx-auto px-4 py-16 text-center">
+      <section className="max-w-4xl mx-auto px-4 py-16 text-center border-2 border-dark">
         <p className="text-red-600 mb-4">{error}</p>
         <Link to="/products" className="text-fern font-medium hover:underline">
           Back to Products

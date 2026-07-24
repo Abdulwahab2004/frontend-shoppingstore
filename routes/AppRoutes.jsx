@@ -8,6 +8,7 @@ import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoutes";
 import Categories from "../pages/Categories";
 import Products from "../pages/Products";
+import ProductDetails from "../pages/ProductDetails";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
         <Route
           path="/dashboard"
           element={

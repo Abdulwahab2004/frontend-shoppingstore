@@ -7,18 +7,23 @@ import Filters from "../components/products/Filters";
 import CategorySlider from "../components/products/CategorySlider";
 import Loader from "../components/common/Loader";
 import heroImage from "../src/assets/images/hero.jpg";
+import Pagination from "../components/products/Pagination";
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [queryParams, setQueryParams] = useState({ limit: 8 });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const data = await getProducts(queryParams);
+        const data = await getProducts({queryParams , page , limit:8});
         setProducts(data.products);
+        setTotalPages(data.pages);
       } catch (err) {
         setError("Failed to load products");
       } finally {
@@ -26,7 +31,7 @@ export default function Home() {
       }
     };
     fetchProducts();
-  }, [queryParams]);
+  }, [queryParams , page]);
 
   const handleSearch = (search) => {
     setQueryParams((prev) => ({ ...prev, search }));
@@ -82,6 +87,7 @@ export default function Home() {
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
+         <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </section>
     </div>
   );

@@ -5,20 +5,24 @@ import ProductCard from "../components/products/ProductCard";
 import SearchBar from "../components/products/SearchBar";
 import Filters from "../components/products/Filters";
 import CategorySlider from "../components/products/CategorySlider";
+import Pagination from "../components/products/Pagination";
 import Loader from "../components/common/Loader";
-import heroImage from "../src/assets/images/hero.jpg";
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [queryParams, setQueryParams] = useState({ limit: 8 });
+  const [queryParams, setQueryParams] = useState({});
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const data = await getProducts(queryParams);
+        const data = await getProducts({ ...queryParams, page, limit: 8 });
         setProducts(data.products);
+        setTotalPages(data.pages);
       } catch (err) {
         setError("Failed to load products");
       } finally {
@@ -26,31 +30,26 @@ export default function Home() {
       }
     };
     fetchProducts();
-  }, [queryParams]);
+  }, [queryParams, page]);
 
   const handleSearch = (search) => {
+    setPage(1);
     setQueryParams((prev) => ({ ...prev, search }));
   };
 
   const handleFilter = ({ minPrice, maxPrice }) => {
+    setPage(1);
     setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
   };
 
   return (
     <div>
-      <section
-  className="relative bg-cover bg-center bg-no-repeat min-h-[500px]"
-  style={{ backgroundImage: `url(${heroImage})` }}
->
-  {/* Overlay */}
-  <div className="absolute inset-0 bg-black/40"></div>
-  {/* Use bg-black/30, bg-black/40, bg-white/50, etc. */}
-
-  <div className="relative z-10 max-w-6xl mx-auto px-4 py-32 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+      <section className="bg-sage/20">
+        <div className="max-w-6xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-3xl md:text-5xl font-bold text-dark mb-4">
             Shop Smarter, Live Better
           </h1>
-          <p className="text-base md:text-lg text-white mb-8">
+          <p className="text-base md:text-lg text-forest mb-8">
             Discover quality products at prices you'll love.
           </p>
           <Link
@@ -82,6 +81,8 @@ export default function Home() {
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
+
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
       </section>
     </div>
   );

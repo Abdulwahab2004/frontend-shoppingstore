@@ -4,6 +4,7 @@ import { getProducts } from "../services/productService";
 import ProductCard from "../components/products/ProductCard";
 import SearchBar from "../components/products/SearchBar";
 import Filters from "../components/products/Filters";
+import Pagination from "../components/products/Pagination";
 import Loader from "../components/common/Loader";
 
 export default function Products() {
@@ -14,17 +15,20 @@ export default function Products() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [queryParams, setQueryParams] = useState({});
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const params = { ...queryParams };
+        const params = { ...queryParams, page, limit: 12 };
         if (categorySlug) {
           params.category = categorySlug;
         }
         const data = await getProducts(params);
         setProducts(data.products);
+        setTotalPages(data.pages);
       } catch (err) {
         setError("Failed to load products");
       } finally {
@@ -32,13 +36,15 @@ export default function Products() {
       }
     };
     fetchProducts();
-  }, [queryParams, categorySlug]);
+  }, [queryParams, categorySlug, page]);
 
   const handleSearch = (search) => {
+    setPage(1);
     setQueryParams((prev) => ({ ...prev, search }));
   };
 
   const handleFilter = ({ minPrice, maxPrice }) => {
+    setPage(1);
     setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
   };
 
@@ -63,6 +69,8 @@ export default function Products() {
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
+
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </section>
   );
 }

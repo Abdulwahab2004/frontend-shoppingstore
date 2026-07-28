@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import Loader from "../components/common/Loader";
 import { useCart } from "../hooks/useCart";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useauth";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
 

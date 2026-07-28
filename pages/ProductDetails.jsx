@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useauth";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
 
-
+s
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);

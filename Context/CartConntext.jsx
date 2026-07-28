@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { getCart as fetchCart, addToCart as addItem } from "../services/cartService";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useauth";
 
 export const CartContext = createContext();
 

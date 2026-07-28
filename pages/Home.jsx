@@ -17,29 +17,31 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1);
 
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setIsLoading(true);
-      try {
-        const data = await getProducts({queryParams , page , limit:8});
-        setProducts(data.products);
-        setTotalPages(data.pages);
-      } catch (err) {
-        setError("Failed to load products");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [queryParams , page]);
-
-  const handleSearch = (search) => {
-    setQueryParams((prev) => ({ ...prev, search }));
+ useEffect(() => {
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getProducts({ ...queryParams, page, limit: 8 });
+      setProducts(data.products);
+      setTotalPages(data.pages);
+    } catch (err) {
+      setError("Failed to load products");
+    } finally {
+      setIsLoading(false);
+    }
   };
+  fetchProducts();
+}, [queryParams, page]);
 
-  const handleFilter = ({ minPrice, maxPrice }) => {
-    setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
-  };
+ const handleSearch = (search) => {
+  setPage(1);
+  setQueryParams((prev) => ({ ...prev, search }));
+};
+
+const handleFilter = ({ minPrice, maxPrice }) => {
+  setPage(1);
+  setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
+};
 
   return (
     <div>

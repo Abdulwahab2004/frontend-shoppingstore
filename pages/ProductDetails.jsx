@@ -2,12 +2,34 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProductById } from "../services/productService";
 import Loader from "../components/common/Loader";
+import { useCart } from "../hooks/useCart";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/common/Button";
+
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const { addToCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    setIsAdding(true);
+    try {
+      await addToCart(product._id);
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -28,7 +50,7 @@ export default function ProductDetails() {
 
   if (error) {
     return (
-      <section className="max-w-4xl mx-auto px-4 py-16 text-center border-2 border-dark">
+      <section className="max-w-4xl mx-auto px-4 py-16 text-center">
         <p className="text-red-600 mb-4">{error}</p>
         <Link to="/products" className="text-fern font-medium hover:underline">
           Back to Products
@@ -59,9 +81,13 @@ export default function ProductDetails() {
           )}
           <p className="text-2xl font-semibold text-fern mb-4">${product.price}</p>
           <p className="text-dark mb-4">{product.description}</p>
-          <p className="text-sm text-forest">
+          <p className="text-sm text-forest mb-3">
             {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </p>
+          
+        <Button onClick={handleAddToCart} isLoading={isAdding} className="mt-4">
+            Add to Cart
+          </Button>
         </div>
       </div>
     </section>

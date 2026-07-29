@@ -6,7 +6,7 @@ import SearchBar from "../components/products/SearchBar";
 import Filters from "../components/products/Filters";
 import Pagination from "../components/products/Pagination";
 import Loader from "../components/common/Loader";
-
+import SkeletonCard from "../components/common/SkeletonCard";
 
 export default function Products() {
   const [searchParams] = useSearchParams();

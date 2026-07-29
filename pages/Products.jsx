@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getProducts } from "../services/productService";
 import ProductCard from "../components/products/ProductCard";
@@ -6,6 +6,7 @@ import SearchBar from "../components/products/SearchBar";
 import Filters from "../components/products/Filters";
 import Pagination from "../components/products/Pagination";
 import Loader from "../components/common/Loader";
+
 
 export default function Products() {
   const [searchParams] = useSearchParams();
@@ -38,15 +39,15 @@ export default function Products() {
     fetchProducts();
   }, [queryParams, categorySlug, page]);
 
-  const handleSearch = (search) => {
+  const handleSearch = useCallback((search) => {
     setPage(1);
     setQueryParams((prev) => ({ ...prev, search }));
-  };
+  },[]);
 
-  const handleFilter = ({ minPrice, maxPrice }) => {
+  const handleFilter =useCallback( ({ minPrice, maxPrice }) => {
     setPage(1);
     setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
-  };
+  },[]);
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">
@@ -57,7 +58,19 @@ export default function Products() {
       <SearchBar onSearch={handleSearch} />
       <Filters onFilter={handleFilter} />
 
-      {isLoading && <Loader />}
+     {isLoading ? (
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    {Array.from({ length: 8 }).map((_, i) => (
+      <SkeletonCard key={i} />
+    ))}
+  </div>
+) : (
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    {products.map((product) => (
+      <ProductCard key={product._id} product={product} />
+    ))}
+  </div>
+)}
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
       {!isLoading && !error && products.length === 0 && (

@@ -22,7 +22,19 @@ export default function Categories() {
     fetchCategories();
   }, []);
 
-  if (isLoading) return <Loader />;
+{isLoading ? (
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    {Array.from({ length: 8 }).map((_, i) => (
+      <SkeletonCard key={i} />
+    ))}
+  </div>
+) : (
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    {products.map((product) => (
+      <ProductCard key={product._id} product={product} />
+    ))}
+  </div>
+)}
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">

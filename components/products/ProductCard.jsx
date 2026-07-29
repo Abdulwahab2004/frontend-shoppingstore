@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 
-export default function ProductCard({ product }) {
+function ProductCard({ product }) {
   const image = product.images?.[0] || "https://via.placeholder.com/300";
 
   return (
@@ -8,11 +9,7 @@ export default function ProductCard({ product }) {
       to={`/products/${product._id}`}
       className="bg-white border border-sage rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200 block"
     >
-      <img
-        src={image}
-        alt={product.name}
-        className="w-full h-40 object-cover"
-      />
+      <img src={image} alt={product.name} className="w-full h-40 object-cover" loading="lazy" />
       <div className="p-3">
         <h3 className="text-dark font-medium truncate">{product.name}</h3>
         <p className="text-fern font-semibold mt-1">${product.price}</p>
@@ -23,3 +20,5 @@ export default function ProductCard({ product }) {
     </Link>
   );
 }
+
+export default memo(ProductCard);

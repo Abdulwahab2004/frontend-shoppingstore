@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getCategories } from "../services/categoryService";
 import Loader from "../components/common/Loader";
 import SkeletonCard from "../components/common/SkeletonCard";
+import ProductCard from "../components/products/ProductCard";
 export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

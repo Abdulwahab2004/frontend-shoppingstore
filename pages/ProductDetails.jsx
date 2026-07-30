@@ -17,19 +17,22 @@ export default function ProductDetails() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isAdding, setIsAdding] = useState(false);
+const [justAdded, setJustAdded] = useState(false);
 
-  const handleAddToCart = async () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    setIsAdding(true);
-    try {
-      await addToCart(product._id);
-    } finally {
-      setIsAdding(false);
-    }
-  };
+const handleAddToCart = async () => {
+  if (!user) {
+    navigate("/login");
+    return;
+  }
+  setIsAdding(true);
+  try {
+    await addToCart(product._id);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 2000);
+  } finally {
+    setIsAdding(false);
+  }
+};
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -85,9 +88,9 @@ export default function ProductDetails() {
             {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </p>
           
-        <Button onClick={handleAddToCart} isLoading={isAdding} className="mt-4">
-            Add to Cart
-          </Button>
+<Button onClick={handleAddToCart} isLoading={isAdding} disabled={justAdded} className="mt-4">
+  {justAdded ? "Added to Cart" : "Add to Cart"}
+</Button>
         </div>
       </div>
     </section>

@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Products = lazy(() => import("../pages/Products"));
 const ProductDetails = lazy(() => import("../pages/ProductDetails"));
 const Categories = lazy(() => import("../pages/Categories"));
+const Cart = lazy(() => import("../pages/Cart"));
 
 export default function AppRoutes() {
   return (
@@ -25,6 +26,7 @@ export default function AppRoutes() {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/cart" element={<Cart />}/>
           <Route
             path="/dashboard"
             element={

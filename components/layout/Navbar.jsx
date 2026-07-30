@@ -12,6 +12,7 @@ export default function Navbar() {
         { name: "Categories", path: "/categories" },
         { name: "Products", path: "/products" },
         { name: "Dashboard", path: "/dashboard" },
+         { name: "Cart", path: "/cart" },
       ]
     : [
         { name: "Home", path: "/" },
@@ -19,7 +20,7 @@ export default function Navbar() {
         { name: "Products", path: "/products" },
         { name: "Login", path: "/login" },
         { name: "Signup", path: "/signup" },
-        { name: "Cart", path: "/cart" },
+       
       ];
 
   return (

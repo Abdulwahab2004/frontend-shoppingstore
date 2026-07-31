@@ -19,7 +19,7 @@ export default function ProductDetails() {
   const [isAdding, setIsAdding] = useState(false);
 const [justAdded, setJustAdded] = useState(false);
 const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
-const inWishlist = isInWishlist(product._id);
+
 
 const handleWishlistToggle = async () => {
   if (!user) {
@@ -64,7 +64,7 @@ const handleAddToCart = async () => {
   }, [id]);
 
   if (isLoading) return <Loader />;
-
+const inWishlist = isInWishlist(product._id);
   if (error) {
     return (
       <section className="max-w-4xl mx-auto px-4 py-16 text-center">

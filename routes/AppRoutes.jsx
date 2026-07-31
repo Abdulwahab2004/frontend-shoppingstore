@@ -13,6 +13,7 @@ const Products = lazy(() => import("../pages/Products"));
 const ProductDetails = lazy(() => import("../pages/ProductDetails"));
 const Categories = lazy(() => import("../pages/Categories"));
 const Cart = lazy(() => import("../pages/Cart"));
+const Wishlist = lazy(() => import("../pages/Wishlist"));
 
 export default function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ export default function AppRoutes() {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/cart" element={<Cart />}/>
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route
             path="/dashboard"
             element={

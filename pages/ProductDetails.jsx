@@ -6,7 +6,7 @@ import { useCart } from "../hooks/useCart";
 import { useAuth } from "../hooks/useauth";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
-
+import { useWishlist } from "../hooks/useWishlist";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -18,6 +18,20 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const [isAdding, setIsAdding] = useState(false);
 const [justAdded, setJustAdded] = useState(false);
+const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+const inWishlist = isInWishlist(product._id);
+
+const handleWishlistToggle = async () => {
+  if (!user) {
+    navigate("/login");
+    return;
+  }
+  if (inWishlist) {
+    await removeFromWishlist(product._id);
+  } else {
+    await addToWishlist(product._id);
+  }
+};
 
 const handleAddToCart = async () => {
   if (!user) {
@@ -91,6 +105,12 @@ const handleAddToCart = async () => {
 <Button onClick={handleAddToCart} isLoading={isAdding} disabled={justAdded} className="mt-4">
   {justAdded ? "Added to Cart" : "Add to Cart"}
 </Button>
+<button
+  onClick={handleWishlistToggle}
+  className="mt-4 ml-2 px-4 py-2 rounded-lg border border-sage text-dark hover:bg-sage/20 transition-colors duration-200"
+>
+  {inWishlist ? "♥ In Wishlist" : "♡ Add to Wishlist"}
+</button>
         </div>
       </div>
     </section>

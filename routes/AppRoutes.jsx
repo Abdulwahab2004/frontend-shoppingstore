@@ -14,6 +14,8 @@ const ProductDetails = lazy(() => import("../pages/ProductDetails"));
 const Categories = lazy(() => import("../pages/Categories"));
 const Cart = lazy(() => import("../pages/Cart"));
 const Wishlist = lazy(() => import("../pages/Wishlist"));
+const Checkout = lazy(() => import("../pages/Checkout"));
+const OrderConfirmation = lazy(() => import("../pages/OrderConfirmation"));
 
 export default function AppRoutes() {
   return (
@@ -29,6 +31,8 @@ export default function AppRoutes() {
           <Route path="/categories" element={<Categories />} />
           <Route path="/cart" element={<Cart />}/>
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+<Route path="/order-confirmation/:id" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
           <Route
             path="/dashboard"
             element={

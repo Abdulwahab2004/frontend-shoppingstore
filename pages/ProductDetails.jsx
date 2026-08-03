@@ -1,52 +1,24 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getProductById } from "../services/productService";
-import Loader from "../components/common/Loader";
 import { useCart } from "../hooks/useCart";
-import { useAuth } from "../hooks/useauth";
-import { useNavigate } from "react-router-dom";
-import Button from "../components/common/Button";
 import { useWishlist } from "../hooks/useWishlist";
+import { useAuth } from "../hooks/useauth";
+import Button from "../components/common/Button";
+import Loader from "../components/common/Loader";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const { addToCart } = useCart();
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const [isAdding, setIsAdding] = useState(false);
-const [justAdded, setJustAdded] = useState(false);
-const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
-
-
-const handleWishlistToggle = async () => {
-  if (!user) {
-    navigate("/login");
-    return;
-  }
-  if (inWishlist) {
-    await removeFromWishlist(product._id);
-  } else {
-    await addToWishlist(product._id);
-  }
-};
-
-const handleAddToCart = async () => {
-  if (!user) {
-    navigate("/login");
-    return;
-  }
-  setIsAdding(true);
-  try {
-    await addToCart(product._id);
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 2000);
-  } finally {
-    setIsAdding(false);
-  }
-};
+  const [justAdded, setJustAdded] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -64,11 +36,11 @@ const handleAddToCart = async () => {
   }, [id]);
 
   if (isLoading) return <Loader />;
-const inWishlist = isInWishlist(product._id);
-  if (error) {
+
+  if (error || !product) {
     return (
       <section className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <p className="text-red-600 mb-4">{error}</p>
+        <p className="text-red-600 mb-4">{error || "Product not found"}</p>
         <Link to="/products" className="text-fern font-medium hover:underline">
           Back to Products
         </Link>
@@ -77,6 +49,34 @@ const inWishlist = isInWishlist(product._id);
   }
 
   const image = product.images?.[0] || "https://via.placeholder.com/500";
+  const inWishlist = isInWishlist(product._id);
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    setIsAdding(true);
+    try {
+      await addToCart(product._id);
+      setJustAdded(true);
+      setTimeout(() => setJustAdded(false), 2000);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    if (inWishlist) {
+      await removeFromWishlist(product._id);
+    } else {
+      await addToWishlist(product._id);
+    }
+  };
 
   return (
     <section className="max-w-4xl mx-auto px-4 py-10">
@@ -98,19 +98,22 @@ const inWishlist = isInWishlist(product._id);
           )}
           <p className="text-2xl font-semibold text-fern mb-4">${product.price}</p>
           <p className="text-dark mb-4">{product.description}</p>
-          <p className="text-sm text-forest mb-3">
+          <p className="text-sm text-forest mb-4">
             {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </p>
-          
-<Button onClick={handleAddToCart} isLoading={isAdding} disabled={justAdded} className="mt-4">
-  {justAdded ? "Added to Cart" : "Add to Cart"}
-</Button>
-<button
-  onClick={handleWishlistToggle}
-  className="mt-4 ml-2 px-4 py-2 rounded-lg border border-sage text-dark hover:bg-sage/20 transition-colors duration-200"
->
-  {inWishlist ? "♥ In Wishlist" : "♡ Add to Wishlist"}
-</button>
+
+          <div className="flex gap-2">
+            <Button onClick={handleAddToCart} isLoading={isAdding} disabled={justAdded}>
+              {justAdded ? "Added to Cart ✓" : "Add to Cart"}
+            </Button>
+
+            <button
+              onClick={handleWishlistToggle}
+              className="px-4 py-2 rounded-lg border border-sage text-dark hover:bg-sage/20 transition-colors duration-200"
+            >
+              {inWishlist ? "♥ In Wishlist" : "♡ Add to Wishlist"}
+            </button>
+          </div>
         </div>
       </div>
     </section>

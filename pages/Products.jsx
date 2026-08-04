@@ -1,11 +1,10 @@
-import { useEffect, useState ,useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getProducts } from "../services/productService";
 import ProductCard from "../components/products/ProductCard";
 import SearchBar from "../components/products/SearchBar";
 import Filters from "../components/products/Filters";
 import Pagination from "../components/products/Pagination";
-import Loader from "../components/common/Loader";
 import SkeletonCard from "../components/common/SkeletonCard";
 
 export default function Products() {
@@ -42,12 +41,12 @@ export default function Products() {
   const handleSearch = useCallback((search) => {
     setPage(1);
     setQueryParams((prev) => ({ ...prev, search }));
-  },[]);
+  }, []);
 
-  const handleFilter =useCallback( ({ minPrice, maxPrice }) => {
+  const handleFilter = useCallback(({ minPrice, maxPrice }) => {
     setPage(1);
     setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
-  },[]);
+  }, []);
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">
@@ -58,30 +57,26 @@ export default function Products() {
       <SearchBar onSearch={handleSearch} />
       <Filters onFilter={handleFilter} />
 
-     {isLoading ? (
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-    {Array.from({ length: 8 }).map((_, i) => (
-      <SkeletonCard key={i} />
-    ))}
-  </div>
-) : (
-  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-    {products.map((product) => (
-      <ProductCard key={product._id} product={product} />
-    ))}
-  </div>
-)}
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
-      {!isLoading && !error && products.length === 0 && (
-        <p className="text-forest">No products found.</p>
+      {isLoading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      ) : (
+        <>
+          {!error && products.length === 0 && (
+            <p className="text-forest">No products found.</p>
+          )}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        </>
       )}
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
-      </div>
 
       <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </section>

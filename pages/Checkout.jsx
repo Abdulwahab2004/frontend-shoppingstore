@@ -1,22 +1,11 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
 import { useCart } from "../hooks/useCart";
-import { createOrder } from "../services/orderService";
-import Input from "../components/common/Input";
+import { createCheckoutSession } from "../services/paymentService";
 import Button from "../components/common/Button";
 
 export default function Checkout() {
-  const { cart, refreshCart } = useCart();
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    fullName: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    phone: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { cart } = useCart();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState("");
 
   const total = useMemo(() => {
@@ -26,23 +15,15 @@ export default function Checkout() {
     );
   }, [cart.items]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleCheckout = async () => {
     setError("");
-    setIsSubmitting(true);
-
+    setIsRedirecting(true);
     try {
-      const order = await createOrder(formData);
-      await refreshCart();
-      navigate(`/order-confirmation/${order._id}`);
+      const data = await createCheckoutSession();
+      window.location.href = data.url; // send the browser to Stripe's hosted page
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to place order");
-    } finally {
-      setIsSubmitting(false);
+      setError("Failed to start checkout. Please try again.");
+      setIsRedirecting(false);
     }
   };
 
@@ -72,21 +53,11 @@ export default function Checkout() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white border border-sage rounded-lg p-6">
-        <h2 className="font-semibold text-dark mb-4">Shipping Address</h2>
+      {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
 
-        <Input label="Full Name" name="fullName" value={formData.fullName} onChange={handleChange} required />
-        <Input label="Address" name="address" value={formData.address} onChange={handleChange} required />
-        <Input label="City" name="city" value={formData.city} onChange={handleChange} required />
-        <Input label="Postal Code" name="postalCode" value={formData.postalCode} onChange={handleChange} required />
-        <Input label="Phone" name="phone" value={formData.phone} onChange={handleChange} required />
-
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-
-        <Button type="submit" fullWidth isLoading={isSubmitting}>
-          Place Order
-        </Button>
-      </form>
+      <Button onClick={handleCheckout} isLoading={isRedirecting} fullWidth>
+        Pay with Stripe
+      </Button>
     </section>
   );
 }

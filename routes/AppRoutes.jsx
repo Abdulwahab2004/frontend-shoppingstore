@@ -18,7 +18,7 @@ const Checkout = lazy(() => import("../pages/Checkout"));
 const OrderConfirmation = lazy(() => import("../pages/OrderConfirmation"));
 const PaymentSuccess = lazy(() => import("../pages/PaymentSuccess"));
 const PaymentFailure = lazy(() => import("../pages/PaymentFailure"));
-
+const OrderHistory = lazy(() => import("../pages/OrderHistory"));
 export default function AppRoutes() {
   return (
     <MainLayout>
@@ -37,6 +37,7 @@ export default function AppRoutes() {
 <Route path="/order-confirmation/:id" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
 <Route path="/payment-success" element={<PaymentSuccess />} />
 <Route path="/payment-failure" element={<PaymentFailure />} />
+<Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
           <Route
             path="/dashboard"
             element={

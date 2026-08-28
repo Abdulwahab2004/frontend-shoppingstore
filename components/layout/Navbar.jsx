@@ -14,6 +14,7 @@ export default function Navbar() {
         { name: "Dashboard", path: "/dashboard" },
          { name: "Cart", path: "/cart" },
          { name: "Wishlist", path: "/wishlist" },
+         { name: "Orders", path: "/orders" },
       ]
     : [
         { name: "Home", path: "/" },

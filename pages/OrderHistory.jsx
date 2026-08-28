@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMyOrders } from "../services/orderService";
-import { API_BASE_URL } from "../utils/constants";
+import { API_BASE_URL } from "../utils/constant";
 import Loader from "../components/common/Loader";
 
 export default function OrderHistory() {

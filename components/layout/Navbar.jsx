@@ -11,10 +11,11 @@ export default function Navbar() {
     ? [
         { name: "Categories", path: "/categories" },
         { name: "Products", path: "/products" },
+        { name: "Cart", path: "/cart" },
+        { name: "Wishlist", path: "/wishlist" },
+        { name: "Orders", path: "/orders" },
         { name: "Dashboard", path: "/dashboard" },
-         { name: "Cart", path: "/cart" },
-         { name: "Wishlist", path: "/wishlist" },
-         { name: "Orders", path: "/orders" },
+        ...(user.role === "admin" ? [{ name: "Admin Panel", path: "/admin" }] : []),
       ]
     : [
         { name: "Home", path: "/" },
@@ -22,7 +23,6 @@ export default function Navbar() {
         { name: "Products", path: "/products" },
         { name: "Login", path: "/login" },
         { name: "Signup", path: "/signup" },
-       
       ];
 
   return (

@@ -3,6 +3,30 @@ import { useEffect, useState } from "react";
 import { getDashboardStats } from "../../services/adminService";
 import Loader from "../../components/common/Loader";
 
+function RevenueChart({ data }) {
+  if (!data || data.length === 0) {
+    return <p className="text-forest">No revenue data for the last 7 days.</p>;
+  }
+
+  const maxValue = Math.max(...data.map((d) => d.total), 1);
+
+  return (
+    <div className="flex items-end gap-3 h-40 bg-white border border-sage rounded-lg p-4">
+      {data.map((d) => (
+        <div key={d._id} className="flex flex-col items-center flex-1">
+          <div
+            className="w-full bg-fern rounded-t"
+            style={{ height: `${(d.total / maxValue) * 100}%` }}
+            title={`$${d.total.toFixed(2)}`}
+          />
+          <span className="text-xs text-forest mt-1">
+            {new Date(d._id).toLocaleDateString(undefined, { weekday: "short" })}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 function StatCard({ label, value }) {
   return (
     <div className="bg-white border border-sage rounded-lg p-4">
@@ -45,7 +69,10 @@ export default function AdminDashboard() {
         <StatCard label="Total Orders" value={stats.totalOrders} />
         <StatCard label="Total Revenue" value={`$${stats.totalRevenue.toFixed(2)}`} />
       </div>
+<h2 className="text-lg font-semibold text-dark mb-3">Revenue (Last 7 Days)</h2>
+<RevenueChart data={stats.revenueByDay} />
 
+<h2 className="text-lg font-semibold text-dark mb-3 mt-8">Recent Orders</h2>
       <h2 className="text-lg font-semibold text-dark mb-3">Recent Orders</h2>
       <div className="bg-white border border-sage rounded-lg overflow-hidden">
         {stats.recentOrders.length === 0 ? (

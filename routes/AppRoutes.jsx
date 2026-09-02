@@ -21,6 +21,11 @@ const PaymentFailure = lazy(() => import("../pages/PaymentFailure"));
 const OrderHistory = lazy(() => import("../pages/OrderHistory"));
 import AdminRoute from "./AdminRoute";
 const AdminDashboard = lazy(() => import("../pages/admin/AdminDashboard"));
+const UserManagement = lazy(() => import("../pages/admin/Usermanagement"));
+const ProductManagement = lazy(() => import("../pages/admin/ProductManagement"));
+const CategoryManagement = lazy(() => import("../pages/admin/CategoryManagement"));
+const OrderManagement = lazy(() => import("../pages/admin/OrderManagement"));
+
 export default function AppRoutes() {
   return (
     <MainLayout>
@@ -41,6 +46,10 @@ export default function AppRoutes() {
 <Route path="/payment-failure" element={<PaymentFailure />} />
 <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
 <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+<Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
+<Route path="/admin/products" element={<AdminRoute><ProductManagement /></AdminRoute>} />
+<Route path="/admin/categories" element={<AdminRoute><CategoryManagement /></AdminRoute>} />
+<Route path="/admin/orders" element={<AdminRoute><OrderManagement /></AdminRoute>} />
           <Route
             path="/dashboard"
             element={

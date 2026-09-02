@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import hero from "../../src/assets/images/hero.webp"
 
 const SLIDES = [
   {
-    image: "/src/assets/images/hero.webp",
+    image: hero,
     title: "Shop Smarter, Live Better",
     subtitle: "Discover quality products at prices you'll love.",
     ctaText: "Browse All Products",

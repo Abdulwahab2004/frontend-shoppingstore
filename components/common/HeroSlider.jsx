@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import hero from "../../src/assets/images/hero.webp"
-
+import hero2 from "../../src/assets/images/hero2.webp"
 const SLIDES = [
   {
     image: hero,
@@ -13,7 +13,7 @@ const SLIDES = [
     objectFit: "cover",
   },
   {
-    image: "/src/assets/images/hero2.webp",
+    image: hero2,
     title: "New Season Arrivals",
     subtitle: "Fresh styles, just landed.",
     ctaText: "Shop New Arrivals",

@@ -1,7 +1,7 @@
 import api from "./api";
 
-export const getDashboardStats = async () => {
-  const res = await api.get("/admin/stats");
+export const getDashboardStats = async (days = 7) => {
+  const res = await api.get("/admin/stats", { params: { days } });
   return res.data;
 };
 

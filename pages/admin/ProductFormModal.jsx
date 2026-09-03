@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { X, PackagePlus, ImageOff } from "lucide-react";
 import { getCategories } from "../../services/categoryService";
 import Button from "../../components/common/Button";
 import Input from "../../components/common/Input";
@@ -15,6 +16,7 @@ export default function ProductFormModal({ product, onClose, onSave }) {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -25,6 +27,7 @@ export default function ProductFormModal({ product, onClose, onSave }) {
   }, []);
 
   const handleChange = (e) => {
+    if (e.target.name === "images") setImageError(false);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -47,11 +50,32 @@ export default function ProductFormModal({ product, onClose, onSave }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold text-dark mb-4">
-          {product ? "Edit Product" : "Add Product"}
-        </h2>
+    <div
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-xl animate-scale-in"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-lg bg-fern/15 text-fern flex items-center justify-center">
+              <PackagePlus size={18} />
+            </div>
+            <h2 className="text-lg font-bold text-dark">
+              {product ? "Edit Product" : "Add Product"}
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-forest hover:bg-sage/20 hover:text-dark transition-colors duration-200"
+            aria-label="Close"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <Input label="Name" name="name" value={formData.name} onChange={handleChange} required />
@@ -64,12 +88,14 @@ export default function ProductFormModal({ product, onClose, onSave }) {
               onChange={handleChange}
               required
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-sage outline-none focus:border-fern"
+              className="w-full px-3 py-2 rounded-lg border border-sage outline-none focus:border-fern transition-colors duration-200"
             />
           </div>
 
-          <Input label="Price" name="price" type="number" value={formData.price} onChange={handleChange} required />
-          <Input label="Stock" name="stock" type="number" value={formData.stock} onChange={handleChange} required />
+          <div className="grid grid-cols-2 gap-3">
+            <Input label="Price" name="price" type="number" value={formData.price} onChange={handleChange} required />
+            <Input label="Stock" name="stock" type="number" value={formData.stock} onChange={handleChange} required />
+          </div>
 
           <div className="mb-4">
             <label className="block mb-1 text-sm font-medium text-dark">Category</label>
@@ -78,7 +104,7 @@ export default function ProductFormModal({ product, onClose, onSave }) {
               value={formData.category}
               onChange={handleChange}
               required
-              className="w-full px-3 py-2 rounded-lg border border-sage outline-none focus:border-fern"
+              className="w-full px-3 py-2 rounded-lg border border-sage outline-none focus:border-fern transition-colors duration-200"
             >
               <option value="">Select a category</option>
               {categories.map((cat) => (
@@ -89,7 +115,27 @@ export default function ProductFormModal({ product, onClose, onSave }) {
 
           <Input label="Image URL" name="images" value={formData.images} onChange={handleChange} />
 
-          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+          <div className="mb-4">
+            <div className="w-full h-32 rounded-lg border border-dashed border-sage bg-sage/10 flex items-center justify-center overflow-hidden">
+              {formData.images && !imageError ? (
+                <img
+                  src={formData.images}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-1 text-forest">
+                  <ImageOff size={20} />
+                  <span className="text-xs">Image preview</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {error && (
+            <p className="text-red-600 text-sm mb-3 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+          )}
 
           <div className="flex gap-2 justify-end mt-4">
             <button

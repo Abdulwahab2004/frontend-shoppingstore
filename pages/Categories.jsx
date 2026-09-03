@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { LayoutGrid, ImageOff } from "lucide-react";
 import { getCategories } from "../services/categoryService";
 import SkeletonCard from "../components/common/SkeletonCard";
 
@@ -23,8 +24,16 @@ export default function Categories() {
   }, []);
 
   return (
-    <section className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-dark mb-6">Categories</h1>
+    <section className="max-w-[1440px] mx-auto px-4 sm:px-6 py-10">
+      <div className="flex items-center gap-2 mb-6">
+        <LayoutGrid size={22} className="text-fern" />
+        <h1 className="text-2xl font-bold text-dark">Categories</h1>
+        {!isLoading && categories.length > 0 && (
+          <span className="text-sm text-forest bg-sage/20 px-2 py-0.5 rounded-full">
+            {categories.length}
+          </span>
+        )}
+      </div>
 
       {error && <p className="text-red-600 mb-4">{error}</p>}
 
@@ -37,7 +46,11 @@ export default function Categories() {
       ) : (
         <>
           {!error && categories.length === 0 && (
-            <p className="text-forest">No categories available yet.</p>
+            <div className="text-center py-20 bg-white border border-dashed border-sage rounded-xl">
+              <LayoutGrid size={36} className="mx-auto text-sage mb-3" />
+              <p className="text-dark font-medium mb-1">No categories yet</p>
+              <p className="text-forest text-sm">Check back soon for new categories.</p>
+            </div>
           )}
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -45,16 +58,25 @@ export default function Categories() {
               <Link
                 key={cat._id}
                 to={`/products?category=${cat.slug}`}
-                className="relative aspect-square rounded-lg overflow-hidden group"
+                className="group relative aspect-square rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               >
-                <img
-                  src={cat.image || "https://via.placeholder.com/300"}
-                  alt={cat.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-dark/40 group-hover:bg-dark/60 transition-colors duration-200 flex items-center justify-center">
-                  <span className="text-white font-semibold text-lg text-center px-2">
+                {cat.image ? (
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-sage/20 flex items-center justify-center">
+                    <ImageOff size={28} className="text-sage" />
+                  </div>
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent transition-all duration-300 group-hover:from-dark/90" />
+
+                <div className="absolute inset-0 flex items-end justify-center pb-4">
+                  <span className="text-white font-semibold text-base text-center px-2 transition-transform duration-300 group-hover:-translate-y-1">
                     {cat.name}
                   </span>
                 </div>

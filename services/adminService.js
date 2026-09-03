@@ -28,3 +28,8 @@ export const updateOrderStatus = async (orderId, status) => {
   const res = await api.put(`/admin/orders/${orderId}/status`, { status });
   return res.data;
 };
+
+export const getOrderByIdAdmin = async (orderId) => {
+  const res = await api.get(`/admin/orders/${orderId}`);
+  return res.data;
+};

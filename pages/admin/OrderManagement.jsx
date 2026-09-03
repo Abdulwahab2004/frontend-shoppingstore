@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { Package, Search } from "lucide-react";
+import { Package, Search, Eye } from "lucide-react";
 import { getAllOrders, updateOrderStatus } from "../../services/adminService";
+import OrderDetailModal from "./OrderDetailModal";
 import Loader from "../../components/common/Loader";
 
 const STATUS_OPTIONS = ["pending", "processing", "shipped", "delivered", "cancelled"];
@@ -19,6 +20,7 @@ export default function OrderManagement() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
+  const [viewingOrderId, setViewingOrderId] = useState(null);
 
   const fetchOrders = useCallback(async () => {
     setIsLoading(true);
@@ -88,7 +90,7 @@ export default function OrderManagement() {
       </div>
 
       <div className="bg-white border border-sage/60 rounded-xl overflow-x-auto">
-        <table className="w-full text-sm min-w-[700px]">
+        <table className="w-full text-sm min-w-[750px]">
           <thead className="bg-sage/20 text-dark text-left">
             <tr>
               <th className="p-3 font-medium">Order ID</th>
@@ -96,12 +98,13 @@ export default function OrderManagement() {
               <th className="p-3 font-medium">Total</th>
               <th className="p-3 font-medium">Status</th>
               <th className="p-3 font-medium">Date</th>
+              <th className="p-3 font-medium text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredOrders.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-6 text-center text-forest">
+                <td colSpan={6} className="p-6 text-center text-forest">
                   No orders found.
                 </td>
               </tr>
@@ -147,12 +150,30 @@ export default function OrderManagement() {
                   <td className="p-3 text-forest">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
+                  <td className="p-3">
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => setViewingOrderId(order._id)}
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-fern hover:bg-fern/10 transition-colors duration-200"
+                        aria-label="View order"
+                      >
+                        <Eye size={15} />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {viewingOrderId && (
+        <OrderDetailModal
+          orderId={viewingOrderId}
+          onClose={() => setViewingOrderId(null)}
+        />
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, ArrowRight, ShoppingBag } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import { updateCartItem, removeFromCart } from "../services/cartService";
-import CartItem from "../components/products/CartItem";
+import CartItem from "../components/products/Cartitem";
 import Loader from "../components/common/Loader";
 
 export default function Cart() {

@@ -10,7 +10,7 @@ import Loader from "../components/common/Loader";
 import SkeletonCard from "../components/common/SkeletonCard";
 import Pagination from "../components/products/Pagination";
 import HeroSlider from "../components/common/HeroSlider";
-
+import TrustBadges from "../components/common/TrustBadges";
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +52,8 @@ export default function Home() {
 </section>
 
       <CategorySlider />
-
+      
+<TrustBadges/>
       <section className="max-w-[1440px] mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-dark">Featured Products</h2>
@@ -60,7 +61,7 @@ export default function Home() {
             to="/products"
             className="text-sm text-fern font-medium hover:underline hidden sm:block"
           >
-            View all →
+            View all 
           </Link>
         </div>
 

@@ -43,10 +43,10 @@ export default function Products() {
     setQueryParams((prev) => ({ ...prev, search }));
   }, []);
 
-  const handleFilter = useCallback(({ minPrice, maxPrice }) => {
-    setPage(1);
-    setQueryParams((prev) => ({ ...prev, minPrice, maxPrice }));
-  }, []);
+const handleFilter = useCallback((filters) => {
+  setPage(1);
+  setQueryParams((prev) => ({ ...prev, ...filters }));
+}, []);
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">

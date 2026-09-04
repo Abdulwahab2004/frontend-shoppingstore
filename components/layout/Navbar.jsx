@@ -18,6 +18,7 @@ import { APP_NAME } from "../../utils/constant";
 import { useAuth } from "../../hooks/useauth";
 import { useCart } from "../../hooks/useCart";
 import { useWishlist } from "../../hooks/useWishlist";
+import ShoppinStore from "../../src/assets/icons/shoppingstore.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +73,7 @@ export default function Navbar() {
           to="/"
           className="text-xl font-bold text-sage tracking-tight hover:opacity-90 transition-opacity duration-200"
         >
-          {APP_NAME}
+          <img src={ShoppinStore} alt="" srcset="" height={130} width={130}   />
         </Link>
 
         <div className="hidden md:flex items-center gap-1">

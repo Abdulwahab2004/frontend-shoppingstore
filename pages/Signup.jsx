@@ -4,6 +4,15 @@ import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import { signupUser } from "../services/authService";
 
+const validatePassword = (password) => {
+  if (password.length < 8) return "Password must be at least 8 characters";
+  if (!/[A-Z]/.test(password)) return "Password must contain an uppercase letter";
+  if (!/[a-z]/.test(password)) return "Password must contain a lowercase letter";
+  if (!/[0-9]/.test(password)) return "Password must contain a number";
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return "Password must contain a special character";
+  return "";
+};
+
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -22,6 +31,12 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
@@ -93,6 +108,9 @@ export default function Signup() {
           placeholder="••••••••"
           required
         />
+        <p className="text-xs text-gray-500 mb-3">
+          Must be 8+ characters with uppercase, lowercase, number, and special character.
+        </p>
         <Input
           label="Confirm Password"
           type="password"

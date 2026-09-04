@@ -3,7 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import Input from "../components/common/Input";
 import Button from "../components/common/Button";
 import { loginUser } from "../services/authService";
-import { useAuth } from "../hooks/useauth"
+import { useAuth } from "../hooks/useauth";
+
+const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,6 +22,17 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (!formData.email || !formData.password) {
+      setError("Please enter both email and password");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
     setIsLoading(true);
 
     try {

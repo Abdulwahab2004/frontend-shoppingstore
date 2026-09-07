@@ -11,10 +11,10 @@ export function SocketProvider({ children }) {
   const { user } = useAuth();
   const socketRef = useRef(null);
   const [notifications, setNotifications] = useState([]);
-  const [adminNotifications, setAdminNotifications] = useState([]);
 
   useEffect(() => {
     if (!user) return;
+
     const socket = io(SOCKET_URL, { withCredentials: true });
     socketRef.current = socket;
 
@@ -34,57 +34,34 @@ export function SocketProvider({ children }) {
       ]);
     });
 
-    socket.on("newOrderAdmin", (data) => {
-      setAdminNotifications((prev) => [
+    // Admin-only event — a fresh order just came in
+    socket.on("newOrder", (data) => {
+      setNotifications((prev) => [
         {
           id: Date.now(),
-          message: `New order #${data.orderId.toString().slice(-6).toUpperCase()} from ${data.customerName} — $${data.total}`,
+          message: `New order received — $${data.totalAmount.toFixed(2)}`,
           read: false,
         },
         ...prev,
       ]);
     });
-socket.on("newContactMessage", (data) => {
-  setAdminNotifications((prev) => [
-    {
-      id: Date.now(),
-      message: `New contact message from ${data.name}: "${data.subject}"`,
-      read: false,
-    },
-    ...prev,
-  ]);
-});
+
     return () => {
       socket.disconnect();
     };
   }, [user]);
 
-  // Operate on whichever list matches the current user's role
   const markAllRead = () => {
-    if (user?.role === "admin") {
-      setAdminNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    } else {
-      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    }
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
   const clearNotifications = () => {
-    if (user?.role === "admin") {
-      setAdminNotifications([]);
-    } else {
-      setNotifications([]);
-    }
+    setNotifications([]);
   };
 
   return (
     <SocketContext.Provider
-      value={{
-        notifications,
-        adminNotifications,
-        markAllRead,
-        clearNotifications,
-        socket: socketRef.current,
-      }}
+      value={{ notifications, markAllRead, clearNotifications, socket: socketRef.current }}
     >
       {children}
     </SocketContext.Provider>

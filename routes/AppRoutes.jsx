@@ -25,7 +25,7 @@ const UserManagement = lazy(() => import("../pages/admin/Usermanagement"));
 const ProductManagement = lazy(() => import("../pages/admin/ProductManagement"));
 const CategoryManagement = lazy(() => import("../pages/admin/CategoryManagement"));
 const OrderManagement = lazy(() => import("../pages/admin/OrderManagement"));
-
+const ContactUs = lazy(() => import("../pages/ContactUs"));
 export default function AppRoutes() {
   return (
     <MainLayout>
@@ -50,6 +50,7 @@ export default function AppRoutes() {
 <Route path="/admin/products" element={<AdminRoute><ProductManagement /></AdminRoute>} />
 <Route path="/admin/categories" element={<AdminRoute><CategoryManagement /></AdminRoute>} />
 <Route path="/admin/orders" element={<AdminRoute><OrderManagement /></AdminRoute>} />
+<Route path="/contact" element={<ContactUs />} />
           <Route
             path="/dashboard"
             element={

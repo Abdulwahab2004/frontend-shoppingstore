@@ -55,6 +55,7 @@ export default function Navbar() {
           : []),
         { name: "", path: "/cart", icon: ShoppingCart, badge: cartCount },
         { name: "", path: "/wishlist", icon: Heart, badge: wishlistCount },
+        { name: "Profile", path: "/profile" },
       ]
     : [
         { name: "Home", path: "/", icon: Home },

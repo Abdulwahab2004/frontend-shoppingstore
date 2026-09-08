@@ -2,10 +2,11 @@ import { createContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "../hooks/useauth";
 import { API_BASE_URL } from "../utils/constant";
+import { onForegroundMessage } from "../services/firebase";
 
 export const SocketContext = createContext();
 
-const SOCKET_URL = API_BASE_URL.replace(/\/api$/, "");
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export function SocketProvider({ children }) {
   const { user } = useAuth();
@@ -13,6 +14,12 @@ export function SocketProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+    onForegroundMessage((payload) => {
+    setNotifications((prev) => [
+      { id: Date.now(), message: payload.notification.body, read: false },
+      ...prev,
+    ]);
+  });
     if (!user) return;
 
     const socket = io(SOCKET_URL, { withCredentials: true });

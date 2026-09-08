@@ -19,3 +19,17 @@ export const logoutUser = async () => {
   const res = await api.post("/auth/logout");
   return res.data;
 };
+
+export const updateProfile = async (data) => {
+  const res = await api.put("/auth/profile", data);
+  return res.data;
+};
+
+export const changePassword = async (data) => {
+  const res = await api.put("/auth/change-password", data);
+  return res.data;
+};
+export const saveFcmToken = async (token) => {
+  const res = await api.post("/auth/fcm-token", { token });
+  return res.data;
+};

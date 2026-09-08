@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import api from "../services/api";
+import { requestNotificationPermission } from "../firebase";
+import { saveFcmToken } from "../services/authService";
 
 export const AuthContext = createContext();
 
@@ -21,9 +23,17 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-  };
+const login = async (userData) => {
+  setUser(userData);
+  const fcmToken = await requestNotificationPermission();
+  if (fcmToken) {
+    try {
+      await saveFcmToken(fcmToken);
+    } catch (err) {
+      // non-critical, don't block login if this fails
+    }
+  }
+};
 
   const logout = () => {
     setUser(null);

@@ -1,17 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { Bell } from "lucide-react";
 import { useSocket } from "../../hooks/useSocket";
-import { useAuth } from "../../hooks/useauth";
+
 export default function NotificationBell() {
-    const { notifications, adminNotifications, markAllRead, clearNotifications } = useSocket();
-const { user } = useAuth();
-  const displayNotifications = user.role === "admin" ? adminNotifications : notifications;
+  const socketData = useSocket();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
 
+  // Defensive fallback — if context isn't ready for any reason, don't crash
+  const notifications = socketData?.notifications || [];
+  const markAllRead = socketData?.markAllRead || (() => {});
+  const clearNotifications = socketData?.clearNotifications || (() => {});
+  const isConnected = socketData?.isConnected || false;
+
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // Close the dropdown when clicking anywhere outside it
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
@@ -35,6 +38,12 @@ const { user } = useAuth();
         aria-label="Notifications"
       >
         <Bell size={19} />
+        <span
+          className={`absolute bottom-1 right-1 w-2 h-2 rounded-full border border-dark ${
+            isConnected ? "bg-green-400" : "bg-gray-400"
+          }`}
+          title={isConnected ? "Connected" : "Disconnected"}
+        />
         {unreadCount > 0 && (
           <span className="absolute top-0.5 right-0.5 bg-red-500 text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">
             {unreadCount}
@@ -45,8 +54,17 @@ const { user } = useAuth();
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-white rounded-xl shadow-xl border border-sage/60 overflow-hidden z-50 animate-scale-in">
           <div className="flex items-center justify-between px-4 py-3 border-b border-sage/40">
-            <h3 className="font-semibold text-dark text-sm">Notifications</h3>
-            {displayNotifications.length > 0 && (
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-dark text-sm">Notifications</h3>
+              <span
+                className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                  isConnected ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {isConnected ? "Live" : "Offline"}
+              </span>
+            </div>
+            {notifications.length > 0 && (
               <button
                 onClick={clearNotifications}
                 className="text-xs text-fern hover:underline"
@@ -57,10 +75,10 @@ const { user } = useAuth();
           </div>
 
           <div className="max-h-80 overflow-y-auto">
-            {displayNotifications.length === 0 ? (
+            {notifications.length === 0 ? (
               <p className="text-center text-forest text-sm py-8">No notifications yet</p>
             ) : (
-              displayNotifications.map((n) => (
+              notifications.map((n) => (
                 <div
                   key={n.id}
                   className="px-4 py-3 border-b border-sage/20 last:border-0 hover:bg-sage/10 transition-colors duration-150"

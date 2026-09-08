@@ -19,7 +19,7 @@ import { APP_NAME } from "../../utils/constant";
 import { useAuth } from "../../hooks/useauth";
 import { useCart } from "../../hooks/useCart";
 import { useWishlist } from "../../hooks/useWishlist";
-import ShoppinStore from "../../src/assets/icons/shoppingstore.png";
+import ShoppinStore from "../../src/assets/icons/shoppingstore.webp";
 import NotificationBell from "./NotificationBell";
 
 export default function Navbar() {

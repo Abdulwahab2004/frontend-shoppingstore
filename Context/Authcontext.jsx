@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import api from "../services/api";
-import { requestNotificationPermission } from "../firebase";
+import { requestNotificationPermission } from "../services/firebase";
 import { saveFcmToken } from "../services/authService";
 
 export const AuthContext = createContext();
